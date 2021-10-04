@@ -6,8 +6,9 @@ echo('Получить остаток деления 7 на 3: ');
 $a = 7;
 $b = 3;
 $c = 0;
-$c=$a/$b;
-echo('<b>'. $c . '</b><br/>');
+$c=$a%$b;
+echo('целочисленный остаток от деления: <b>'. $c . '</b><br/>');
+echo ('если бы были float числа: <b>'. fmod($a, $b) . '</b><br/>');
 
 echo('Получить целую часть сложения 7 и 7,15: ');
 $a = 7;
@@ -82,3 +83,43 @@ echo('результат сравнения: '.'<b>'
 
 
 echo('</br><i>' . "есть вариант что нужно использовать 12*(13+7) и (223+28)*2, но хз..." . '/<i>');
+
+
+
+
+
+$strHello='hell d';
+
+//echo(preg_match_all('/l/', $strHello));
+
+
+
+$arr=str_split($strHello);
+$inc=0;
+
+foreach ($arr as $value)
+{
+    if ($value=="l")
+    {
+        $inc++;
+    }
+}
+//echo ($inc);
+
+//echo ("  ");
+
+$inc=0;
+
+for ($i=1; $i<strlen($strHello); $i++)
+{
+    if ($strHello[$i]== "l")
+    {
+        $inc++;
+    }
+}
+
+//echo ($inc);LTQ
+
+//echo ("  ");
+
+//echo(substr_count($strHello,"l"));
