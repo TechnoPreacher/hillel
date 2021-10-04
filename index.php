@@ -1,42 +1,4 @@
 <?php
-
-$strHello='hell d';
-
-//echo(preg_match_all('/l/', $strHello));
-
-
-
-$arr=str_split($strHello);
-$inc=0;
-
-foreach ($arr as $value)
-{
-   if ($value=="l")
-    {
-        $inc++;
-    }
-}
-//echo ($inc);
-
-//echo ("  ");
-
-$inc=0;
-
-for ($i=1; $i<strlen($strHello); $i++)
-{
-   if ($strHello[$i]== "l")
-   {
-       $inc++;
-   }
-}
-
-//echo ($inc);LTQ
-
-//echo ("  ");
-
-//echo(substr_count($strHello,"l"));
-
-
 echo('<b>' . 'ДЕЙСТВИЯ С ЧИСЛАМИ' . '</b><br/>');
 
 
