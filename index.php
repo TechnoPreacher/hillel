@@ -1,264 +1,176 @@
 <?php
+require_once 'ParentClass.php';
 
-//0 массивы для тестов
+$objectForTest1 = new parentClass;//первый экземпляр
+$objectForTest2 = new parentClass;//второй экземпляр
 
-//числовые (простые)
-$ar1dim=[
-    10,
-    20,
-    30,
-    40,
-    50,
-    60
-];
+echo '1) Создать родительский (главный класс)/ Класс должен содержать 2 свойства/ Каждое свойство должно иметь геттеры и сеттеры</br></br>';
 
-$ar2dim=[
-    10,
-    20,
-    [
-        30,
-        40,
-        50
-    ],
-    60
-];
+echo 'ТЕСТИРУЮ НА ДВУХ ОБЪЕКТАХ. Cобственно сам класс создан в отдельном файле ParentClass.php и подключен через однократное подключение сюда</br></br>';
 
-$ar3dim=[
-    10,
-    20,
-    [
-        30,
-        [
-            40,
-            50
-        ]
-    ],
-    60
-];
+echo 'для начала выведу значения двух свойств по умолчанию у обоих объектов, ссылающихся на родительский класс: </br>';
+echo 'объект $objectForTest1 свойство Property1(): <b>'. $objectForTest1->getProperty1().'</b></br>';
+echo 'объект $objectForTest2 свойство Property1(): <b>'. $objectForTest2->getProperty1().'</b></br>';
+echo 'объект $objectForTest1 свойство Property2(): <b>'. $objectForTest1->getProperty2().'</b></br>';
+echo 'объект $objectForTest2 свойство Property2(): <b>'. $objectForTest2->getProperty2().'</b></br>';
 
-//явно ассоциативные (сложные)
+echo '</br>ну а теперь поменяю первые свойства на псевдорандомные числа диапазона 1-100: </br>';
+$objectForTest1->setProperty1(random_int(0,100));
+$objectForTest2->setProperty1(random_int(0,100));
+echo 'объект $objectForTest1 свойство Property1(): <b>'. $objectForTest1->getProperty1().'</b></br>';
+echo 'объект $objectForTest2 свойство Property1(): <b>'. $objectForTest2->getProperty1().'</b></br>';
 
-$as1dim=[
-    '0Dim0Key'=>11,
-    '0Dim1Key'=>22,
-    33,
-    '0Dim3Key'=>44,
-    55
-];
+echo '</br> а во вторые отправлю рандомное число и упячку: </br>';
+$objectForTest1->setProperty2(random_int(0,100).'упячка');
+$objectForTest2->setProperty2(random_int(0,100).'упячка');
+echo 'объект $objectForTest1 свойство Property2(): <b>'. $objectForTest1->getProperty2().'</b></br>';
+echo 'объект $objectForTest2 свойство Property2(): <b>'. $objectForTest2->getProperty2().'</b></br>';
 
-$as2dim=[
-    '0Dim0Key'=>21,
-    '0Dim1Key'=> 22,
-    [
-        '1Dim0Key'=>23,
-        '1Dim1Key'=>24,
-        25,
-        '1Dim3Key'=>26
-    ],
-   '0Dim3Key'=>27
-];
+echo '</br><s>собственно говоря, т.к. первое свойтство класса объявлено как public, ему нафиг не нужны геттеры/и сетеры:</br>';
+echo'обращение к значению свойства класса напрямую через objectForTest1->property1: <b>'. '$objectForTest1->property1'.'</b></br>';
+echo'обращение к значению свойства класса напрямую через objectForTest2->property1: <b>'. '$objectForTest2->property1'.'</b></br></br>';
 
-$as3dim=[
-    '0Dim0Key'=>31,
-    '0Dim1key'=>32,
-    [
-        '1Dim0Key'=>33,
-        '1Dim1Key'=>36,
-        [
-            '2Dim0Key'=>34,
-            '2Dim1Key'=>35,
-            '2Dim2Key'=>36,
-            [
-                '3dim0key'=>90]
-        ],
-          '1Dim3Key'=>36,
-    ],
-    '0Dim3Key'=>37,
-    '0Dim4Key'=>377
-];
+echo 'переприсвоение значения через objectForTest1->property1= <b>' . ('$objectForTest1->property1=random_int(0,100)') .'</b></br>';
+echo 'переприсвоение значения через objectForTest2->property1= <b>' . ('$objectForTest2->property1=random_int(0,100)')  .'</b></s></br>';
 
-echo '<b> 0. массивы для тестов </b></br>';
-echo 'одномерный ar1dim: <b>' . json_encode($ar1dim)  . '</b></br>';
-echo ' двумерный ar2dim: <b>' . json_encode($ar2dim) . '</b></br>';
-echo 'трёхмерный ar3dim: <b>' . json_encode($ar3dim) . '</b></br>';
-
-echo 'одномерный as1dim: <b>' . json_encode($as1dim)  . '</b></br>';
-echo ' двумерный as2dim: <b>' . json_encode($as2dim) . '</b></br>';
-echo 'трёхмерный as3dim: <b>' . json_encode($as3dim) . '</b></br></br>';
-
-//1. Создать функцию принимающую массив произвольной вложенности и определяющий любой элемент номер которого передан параметром во всех вложенных массивах.
-echo '<b>1. Создать функцию принимающую массив произвольной вложенности и определяющий любой элемент номер которого передан параметром во всех вложенных массивах: </b></br>';
-
-//ищет элементы по порядковому номеру и формирует строку из них вида ключ-->значение
-//тут же третим параметров вызова номер вложенности (от нуля)
-function someElement(array $arr2, int $index2, int $dim=0): string
-{
-    $s = "";
-    $i = 0;
-    foreach ($arr2 as $k => $v)
-    {
-        if (is_array($v))
-        {
-            $s = $s . someElement($v, $index2,$dim+1);
-        }
-        else
-            if ($index2 == $i)
-            {
-                $s = $s  . "->". $k . "->" . $v ."->". $dim;
-            }
-        $i++;
-    }
-
-    return $s;
-}
-
-function resultFormat(array $arr, int $index):array
-{
-    $c=array();
-    $b=someElement($arr, $index);
-    if (strlen($b)>0)
-    {
-        $b = substr($b, 2);
-        $b = explode("->", $b);
-        $z = 0;
-        for ($i = 0; $i < count($b); $i = $i + 3)
-        {
-       if ($b[$i+2]<>0) //отбрасываю корневые элементы
-       {
-           $c[$b[$i + 2]] = [$b[$i] => $b[$i + 1]];
-           $z++;
-       }
-       }
-       // return $c;
-
-    }
-   // else
-    {
-        return $c;
-    }
-}
+echo '</br>2) Создать 3 наследника родительского класса
+Каждый наследник должен содержать одно свойство
+Каждое свойство должно иметь геттер и сеттер
+Наследники должны реализовать по одному методу который выполняет одно математическое действие с данными родителя и своими данными
+Один наследник не должен быть наследуемым
+Один из наследников должен содержать абстрактную функцию возведения в степень</br></br>';
 
 
+echo '2.1) РАБОТА ПЕРВОГО ДОЧЕРНЕГО КЛАССА</br></br>';
 
-echo '
-## теперь юзается две функции: одна формирует строку с парами ключ--значение, а вторая - создаёт массив</br>
-вид результата:НОМЕР ВЛОЖЕННОСТИ = [ЭЛЕМЕНТ ИЗ ИСХОДНОГО МАССИВА В ВИДЕ ПАРЫ КЛЮЧ->ЗНАЧНИЕ]  </br>
-## массив всегда пуст для массивов без вложений (по условию задачи нужны именно вложенные)  </br>
-## массив может быть пустой если не найдены эдлементы </br>
-## глобальные переменные всё также не юзаются</br></br>
+require_once 'ChildClassSum.php';//подключаю первый дочерний класс
+$childSum = new ChildClassSum();//создаю объект-ссылку на дочерний класс
 
-!!! порядковый номер при вызове функции - считается от нуля!</br>
-!!! вложенность считается от нуля (0 -корневой массив, 1 - первая степень вложенности и т.д) </br></br> 
+echo 'собственно, два свойства уже дочернего класса ChildClassSum до изменения:</br>';
+echo 'заимствованное свойство родительского класса: <b>' . $childSum->getProperty1().'</b></br>';
+echo 'личное свойство дочернего класса: <b>' .$childSum->getChildClassSumProperty1().'</b></br>';
 
-';
+echo '</br>ну а теперь поменяю значения свойств : </br>';
+$childSum->setProperty1(199);
+$childSum->setChildClassSumProperty1(299);
 
-//много текста для проверки процедуры с разными массивами:
-//индексы меняются от 0 до 6 чтоб показать как вырождаются результаты
+echo ' свойство родительского класса: <b>'  .  $childSum->getProperty1().'</b></br>';
+echo 'личное свойство дочернего класса: <b>' . $childSum->getChildClassSumProperty1().'</b></br>';
 
-for ($indexPos=0; $indexPos<5; $indexPos++)
-{
-   echo "</br> выводим данные для искомого элемента с порядковым номером = $indexPos : </br></br>";
-    //с масисвами $ar1dim, $ar2dim, $ar3dim
-    for ($i = 1; $i < 4; $i++)
-    {
-        $arr = 'ar' . $i . 'dim';//имя переменной переменной для внутрицикловой обработки
-  echo 'для массива ' . 'ar' . $i . 'dim :' . json_encode(resultFormat(${$arr}, $indexPos)) . '</br>';
-    }
-    //с масисвами $as1dim, $as2dim, $as3dim
-    for ($i = 1; $i < 4; $i++)
-    {
-        $arr = 'as' . $i . 'dim';//имя переменной переменной для внутрицикловой обработки
-     echo 'для массива ' . 'as' . $i . 'dim :' . json_encode(resultFormat(${$arr}, $indexPos)) . '</br>';
-    }
-  //
-   //
-}
+$sum=0;//переменная для получения результатов
+$sum=$childSum->mySum();//вызываю функцию из дочернего класса:
+echo "результат применения функции из пользовательского класса: <b> $sum</b></br></br>";
+
+
+echo '2.2) РАБОТА ВТОРОГО ДОЧЕРНЕГО КЛАССА (сделан ненаследуемым)</br></br>';
+echo 'сделал не математическую а строковую операцию в методе - так интереснее';
+require_once 'ChildClassSub.php';//подключаю первый дочерний класс
+$childSub = new ChildClassSub();//создаю объект-ссылку на дочерний класс
+
+echo 'два свойства уже дочернего класса ChildClassSub до изменения:</br>';
+echo 'заимствованное свойство родительского класса: <b>' . $childSub->getProperty2().'</b></br>';
+echo 'личное свойство дочернего класса: <b>' .$childSub->getChildClassSubProperty1().'</b></br>';
+
+echo '</br>ну а теперь поменяю значения свойств : </br>';
+$childSub->setProperty2('how many $$$ do you have for me, dad?');
+$childSub->setChildClassSubProperty1('$$$');
+
+echo ' свойство родительского класса: <b>'  .  $childSub->getProperty2().'</b></br>';
+echo 'личное свойство дочернего класса: <b>' . $childSub->getChildClassSubProperty1().'</b></br>';
+
+$money=0;//переменная для получения результатов
+
+//вызываю функцию из дочернего класса:
+$money=$childSub->findStr();
+
+echo "результат применения функции из пользовательского класса: <b> $money</b></br></br>";
 
 
 
 
-//2. Создать функцию которая считает все буквы b в переданной строке, в случае если передается не строка функция должна возвращать false
-echo '</br></br><b> 2. Создать функцию которая считает все буквы b в переданной строке, в случае если передается не строка функция должна возвращать false </b></br>
-##для не строк вместо false видна пустота, т.к. логический тип данных не отображается через echo </br></br>';
+echo '2.3) РАБОТА ТРЕТЬЕГО ДОЧЕРНЕГО КЛАССА</br></br>';
+require_once 'ChildClassLast.php';//подключаю третий дочерний класс
+echo 'подробности в ChildClassLast.php</br>';
 
-//тестовые строки
-$string1='build best brake before better booster';
-$string2='no more find ';
-$string3=99.9;
-$string4="999burn";
-$string5='only one b inside';
+echo 'по задаче в классе должен быть абстрактный метод, значит и весь класс нужно делать абстрактным</br>';
+echo 'ну а создавать объекты от абстрактных классов нельзя, поэтому часть кода закомментирована</br>';
+echo 'но оставлю для тестирования класса: этот код заработает, если убрать abstract при инициализации</br></br>';
 
-//искомый символ:
-$letter='b';
+/*
+$ChildLast = new ChildClassLast();//создаю объект-ссылку на дочерний класс
 
-function findLetter($inputString, $charForFind): bool|int
-{
-    return (!is_string($inputString) ? false : substr_count($inputString,$charForFind) );
-}
+echo 'два свойства уже дочернего класса ChildClassLast до изменения:</br>';
+echo 'заимствованное свойство родительского класса: <b>' . $ChildLast->getProperty1().'</b></br>';
+echo 'личное свойство дочернего класса: <b>' .$ChildLast->getChildClassLastProperty1().'</b></br>';
 
-echo 'ниже дан результат в формате: строка => число букв b: </br></br>';
-echo " $string1 => <b>". (findLetter($string1,$letter)).'</b></br>';
-echo " $string2 => <b>". (findLetter($string2,$letter)).'</b></br>';
-echo " $string3 => <b>". (findLetter($string3,$letter)).'</b></br>';
-echo " $string4 => <b>". (findLetter($string4,$letter)).'</b></br>';
-echo " $string5 => <b>". (findLetter($string5,$letter)).'</b></br>';
+echo '</br>ну а теперь поменяю значения свойств : </br>';
+$ChildLast->setProperty1(333);
+$ChildLast->setChildClassLastProperty1(90.13);
+
+echo ' свойство родительского класса: <b>'   .  $ChildLast->getProperty1().'</b></br>';
+echo 'личное свойство дочернего класса: <b>' . $ChildLast->getChildClassLastProperty1().'</b></br>';
+
+$multi=0;//переменная для получения результатов
+
+//вызываю функцию из дочернего класса:
+$multi=$ChildLast->multiply();
+
+echo "результат применения функции из пользовательского класса: <b> $multi</b></br>";
+
+*/
+
+echo '</br> 3) Создать по 2 наследника от наследников первого уровня
+Каждое свойство должно иметь геттер и сеттер
+Наследники должны реализовать по одному методу который выполняет одно математическое действие с данными родителя и своими данными
+И по одному методу который выполняет любое математическое действие со свойством корневого класса и своим свойством
+
+В случае если реализован наследник класса содержащего абстрактную функцию то класс должен содержать реализацию абстракции</br></br>';
 
 
-//3 Создать функцию которая считает сумму значений всех элементов массива произвольной глубины
-echo '</br></br><b> 3.Создать функцию которая считает сумму значений всех элементов массива произвольной глубины</b></br></br>';
+echo '3.1) РАБОТА С ПЕРВЫМ ВНУЧАТЫМ КЛАССОМ</br>';
 
-function user($arr)
-{
-    $sum=0;
-    foreach ($arr as $v)
-    {
-        if (is_array($v))
-        {
-            $sum=$sum+user($v);
-        }
-        else
-        {
-            $sum=$sum+$v;// echo $v . '</br>';
-        }
-    }
-    return $sum;
-}
+require_once 'GrandchildClassSum.php';//подуключаю внучатый класс
 
-//echo 'тест функции суммы на одномерном массиве: <b>' . user($ar1dim) . '</b></br>';
-//echo 'тест функции суммы на двумерном массиве:  <b>' . user($ar2dim) . '</b></br>';
-//echo 'тест функции суммы на трёхмерном массиве: <b>' . user($ar3dim) . '</b></br>';
-echo 'для массива $ar1dim = '.json_encode($ar1dim) . ': <b>' . user($ar1dim) . '</b></br>';
-echo 'для массива $ar2dim = '.json_encode($ar2dim) . ': <b>' . user($ar2dim) . '</b></br>';
-echo 'для массива $ar3dim = '.json_encode($ar3dim) . ': <b>' . user($ar3dim) . '</b></br>';
+$grandChildSum=new GrandchildClassSum();//создаю объект - экземпляр внучатого класса
 
-echo '</br>';
+//устанавливаю свойства текущего класса, родительского класса, корневого класса.
+$grandChildSum->setGrandchildClassSumProperty1(10) ;
+$grandChildSum->setChildClassSumProperty1(20)  ;
+$grandChildSum->setProperty1(30);
 
-//4. Создать функцию которая определит сколько квадратов меньшего размера можно вписать в квадрат большего размера размер возвращать в float
-echo '<b> 4. Создать функцию которая определит сколько квадратов меньшего размера можно вписать в квадрат большего размера размер возвращать в float: </b></br>
-# трактую, что размер квадрата - это длина его стороны </br>';
+echo 'новое значение для свойства текущего (внучатого )класса: <b>'. $grandChildSum->getGrandchildClassSumProperty1() . '</b></br>';
+echo 'новое значение для свойства родителского класса: <b>'. $grandChildSum->getChildClassSumProperty1() . '</b></br>';
+echo 'новое значение для свойства корневого класса: <b>'. $grandChildSum->getProperty1() . ' </b></br>';
 
-function howMuchSquare(float $bigSize, float $smallSize):float
-{
-    //по длине стороны вычисляю площадь большого и малого квадратов
-    //возвращаю отношение площадей - это и будет число
-    //красиво НЕ делаю: будет писать в том числе, к примеру, ноль целых 5 десятых,
-    // если площадь малого квадрата окажется больше площади большого
-    $bigS=$bigSize*$bigSize;
-    $smallS=$smallSize*$smallSize;
-    return (($smallS<>0) ? $bigS/$smallS : 0) ;
+//вызываю функцию расчёта по данным родительского и текущего классов
+echo 'функция, работающая с данными текущего и родительского классов: <b>' . $grandChildSum->fromCurrentAndParent().'</b></br>';
 
-}
+//вызываю функцию расчёта по данным корневого и текущего классов
+echo'функция, работающая с данными текущего и корневого классов: <b>' . $grandChildSum->fromCurrentAndGrandFather().'</b></br>';
 
-//массив с размерами сторон для тестов функции
-$arSq =
-    [
-        10=>1,
-        1=>0.1,
-        100=>50,
-        1000=>2000,
-        9=>3
-    ];
-foreach ($arSq as $big=>$small)
-{
-    echo "в квадрат со стороной $big влезет <b>" . howMuchSquare($big, $small) . "</b> квадратов со стороной $small </br>";
-}
+echo '</br> 3.2) РАБОТА С ВНУЧАТЫМИ КЛАССАМИ ОТ НЕНАСЛЕДУЕМОГО КЛАССА ChildClassSub: нельзя создать наследников. подробности в GrandchildClassSub.php</br>';
+
+echo '</br>3.3) РАБОТА С ТРЕТЬИМ ВНУЧАТЫМ КЛАССОМ (абстрактным)</br>';
+
+require_once 'GrandchildClassLast.php';//подключаю внучатый класс
+
+$GrandchildLast=new GrandchildClassLast();//создаю объект - экземпляр внучатого класса
+
+//устанавливаю свойства текущего класса, родительского класса, корневого класса.
+$GrandchildLast->setGrandchildClassLastProperty1(11) ;
+$GrandchildLast->setChildClassLastProperty1(22);
+$GrandchildLast->setProperty1(33);
+
+echo 'новое значение для свойства текущего (внучатого )класса: <b>'. $GrandchildLast->getGrandchildClassLastProperty1() . '</b></br>';
+echo 'новое значение для свойства родителского класса: <b>'. $GrandchildLast->getChildClassLastProperty1() . '</b></br>';
+echo 'новое значение для свойства корневого класса: <b>'. $GrandchildLast->getProperty1() . ' </b></br>';
+
+//вызываю функцию расчёта по данным родительского и текущего классов
+echo 'функция, работающая с данными текущего и родительского классов: <b>' . $GrandchildLast->currentParentMulti().'</b></br>';
+
+//вызываю функцию расчёта по данным корневого и текущего классов
+echo'функция, работающая с данными текущего и корневого классов: <b>' . $GrandchildLast->currentGrandFatherMulti().'</b></br>';
+
+echo 'работа абстрактной функции возведения в степень (тупо для двух чисел 10 и 2): <b>';
+
+echo $GrandchildLast->power(10,2).'</br>';
