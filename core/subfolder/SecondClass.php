@@ -1,6 +1,6 @@
 <?php
 
-namespace nikolaysulima\hillel\core\subfolder;
+namespace mynamespase\core\subfolder;
 
 class SecondClass
 {

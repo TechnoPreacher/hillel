@@ -1,9 +1,9 @@
 <?php
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 
 
-use nikolaysulima\hillel\core\Router;
-use nikolaysulima\hillel\core\subfolder\SecondClass;
+use mynamespase\core\Router;
+use mynamespase\core\subfolder\SecondClass;
 
 
 $obj = new Router();
