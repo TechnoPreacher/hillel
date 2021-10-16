@@ -2,7 +2,7 @@
     "name": "nikolaysulima/hillel",
     "autoload": {
         "psr-4": {
-            "nikolaysulima\\hillel\\": ""
+            "myns\\": ""
         }
     },
     "authors": [

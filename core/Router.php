@@ -1,9 +1,8 @@
 <?php
 
-//PSR-4 autoloading configured. Use "namespace Nikolaysulima\Hillel;" in src/
-//Include the Composer autoloader with: require 'vendor/autoload.php';
 
-namespace nikolaysulima\hillel\core;
+
+namespace myns\core;
 
 class Router
 {
