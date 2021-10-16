@@ -2,8 +2,8 @@
 require '../vendor/autoload.php';
 
 
-use mynamespase\core\Router;
-use mynamespase\core\subfolder\SecondClass;
+use myns\core\Router;
+use myns\core\subfolder\SecondClass;
 
 
 $obj = new Router();

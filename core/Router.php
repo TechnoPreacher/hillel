@@ -2,7 +2,7 @@
 
 
 
-namespace mynamespase\core;
+namespace myns\core;
 
 class Router
 {

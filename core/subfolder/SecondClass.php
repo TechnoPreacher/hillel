@@ -1,6 +1,6 @@
 <?php
 
-namespace mynamespase\core\subfolder;
+namespace myns\core\subfolder;
 
 class SecondClass
 {
